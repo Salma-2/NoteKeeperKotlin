@@ -26,7 +26,7 @@ class NoteActivity : AppCompatActivity() {
         spinner_courses.adapter = adapterCourses
 
         notePosition = intent.getIntExtra(EXTRA_NOTE_POSITION, POSITION_NOT_SET)
-        if(notePosition != POSITION_NOT_SET) {
+        if (notePosition != POSITION_NOT_SET) {
             displayNote()
         }
 
@@ -68,10 +68,10 @@ class NoteActivity : AppCompatActivity() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        if(notePosition >= DataManager.notes.lastIndex){
+        if (notePosition >= DataManager.notes.lastIndex) {
             val menuItem = menu?.findItem(R.id.action_next)
             //mmkon tkon null le menu null , aw lw mafesh el item el bdwr 3leh
-            if(menuItem != null){
+            if (menuItem != null) {
                 menuItem.icon = getDrawable(R.drawable.ic_baseline_block_24)
                 menuItem.isEnabled = false
             }
@@ -80,4 +80,16 @@ class NoteActivity : AppCompatActivity() {
         return super.onPrepareOptionsMenu(menu)
     }
 
+    override fun onPause() {
+        super.onPause()
+        saveNote()
+    }
+
+    private fun saveNote() {
+        val note = DataManager.notes[notePosition]
+        note.text = text_note_text.text.toString()
+        note.title = text_note_title.text.toString()
+        //returns ref to the selected course
+        note.course = spinner_courses.selectedItem as CourseInfo
+    }
 }
