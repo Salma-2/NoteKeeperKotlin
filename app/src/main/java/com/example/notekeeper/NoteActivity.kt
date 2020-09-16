@@ -30,7 +30,6 @@ class NoteActivity : AppCompatActivity() {
             displayNote()
         }
 
-
     }
 
     private fun displayNote() {
@@ -65,5 +64,20 @@ class NoteActivity : AppCompatActivity() {
     private fun moveNext() {
         ++notePosition
         displayNote()
+        invalidateOptionsMenu()
     }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        if(notePosition >= DataManager.notes.lastIndex){
+            val menuItem = menu?.findItem(R.id.action_next)
+            //mmkon tkon null le menu null , aw lw mafesh el item el bdwr 3leh
+            if(menuItem != null){
+                menuItem.icon = getDrawable(R.drawable.ic_baseline_block_24)
+                menuItem.isEnabled = false
+            }
+
+        }
+        return super.onPrepareOptionsMenu(menu)
+    }
+
 }
