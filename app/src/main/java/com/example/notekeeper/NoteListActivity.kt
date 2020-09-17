@@ -22,15 +22,18 @@ class NoteListActivity : AppCompatActivity() {
 
         list_notes.setOnItemClickListener{parent, view, position, id ->
             val activityIntent = Intent(this, NoteActivity::class.java)
-            activityIntent.putExtra(EXTRA_NOTE_POSITION, position)
+            activityIntent.putExtra(NOTE_POSITION, position)
             startActivity(activityIntent)
         }
-
-
 
         findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
             val activityIntent = Intent(this, NoteActivity::class.java)
             startActivity(activityIntent)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (list_notes.adapter as ArrayAdapter<NoteInfo>).notifyDataSetChanged()
     }
 }

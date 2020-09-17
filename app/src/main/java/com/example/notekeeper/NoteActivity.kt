@@ -25,11 +25,22 @@ class NoteActivity : AppCompatActivity() {
         adapterCourses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner_courses.adapter = adapterCourses
 
-        notePosition = intent.getIntExtra(EXTRA_NOTE_POSITION, POSITION_NOT_SET)
+
+
+        notePosition = savedInstanceState?.getInt(NOTE_POSITION, POSITION_NOT_SET)?:
+            intent.getIntExtra(NOTE_POSITION, POSITION_NOT_SET)
+
         if (notePosition != POSITION_NOT_SET) {
             displayNote()
+        } else {
+            createNewNote()
         }
 
+    }
+
+    private fun createNewNote() {
+        DataManager.notes.add(NoteInfo())
+        notePosition = DataManager.notes.lastIndex
     }
 
     private fun displayNote() {
@@ -91,5 +102,10 @@ class NoteActivity : AppCompatActivity() {
         note.title = text_note_title.text.toString()
         //returns ref to the selected course
         note.course = spinner_courses.selectedItem as CourseInfo
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(NOTE_POSITION, notePosition)
     }
 }
