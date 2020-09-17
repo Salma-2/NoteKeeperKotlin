@@ -1,14 +1,18 @@
 package com.example.notekeeper
 
 import android.os.Bundle
+import android.provider.ContactsContract
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_note.*
 
 
 class NoteActivity : AppCompatActivity() {
+    private val tag = this::class.simpleName
     private var notePosition = POSITION_NOT_SET
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,18 +27,24 @@ class NoteActivity : AppCompatActivity() {
             DataManager.courses.values.toList()
         )
         adapterCourses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
         spinner_courses.adapter = adapterCourses
 
 
 
-        notePosition = savedInstanceState?.getInt(NOTE_POSITION, POSITION_NOT_SET)?:
-            intent.getIntExtra(NOTE_POSITION, POSITION_NOT_SET)
+        notePosition =
+            savedInstanceState?.getInt(NOTE_POSITION, POSITION_NOT_SET) ?: intent.getIntExtra(
+                NOTE_POSITION,
+                POSITION_NOT_SET
+            )
 
         if (notePosition != POSITION_NOT_SET) {
             displayNote()
         } else {
             createNewNote()
         }
+
+        Log.d(tag, "onCreate")
 
     }
 
@@ -44,12 +54,21 @@ class NoteActivity : AppCompatActivity() {
     }
 
     private fun displayNote() {
+
+        if (notePosition > DataManager.notes.lastIndex) {
+            showMessage("Note not found")
+            Log.e(tag, "Invalid note position $notePosition," +
+                    " max valid position ${DataManager.notes.lastIndex}")
+            return
+        }
+        Log.i(tag, "Displaying note for position $notePosition")
         val note = DataManager.notes.get(notePosition)
         text_note_title.setText(note.title)
         text_note_text.setText(note.text)
 
         val coursePosition = DataManager.courses.values.indexOf(note.course)
         spinner_courses.setSelection(coursePosition)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -65,11 +84,21 @@ class NoteActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_settings -> true
             R.id.action_next -> {
-                moveNext()
+                if (notePosition < DataManager.notes.lastIndex) {
+                    moveNext()
+                } else {
+                    val msg = "No more notes"
+                    showMessage(msg)
+                }
+
                 return true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun showMessage(msg: String) {
+        Snackbar.make(text_note_title, msg, Snackbar.LENGTH_LONG).show()
     }
 
     private fun moveNext() {
@@ -94,6 +123,7 @@ class NoteActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         saveNote()
+        Log.d(tag, "onPause")
     }
 
     private fun saveNote() {
@@ -101,6 +131,7 @@ class NoteActivity : AppCompatActivity() {
         note.text = text_note_text.text.toString()
         note.title = text_note_title.text.toString()
         //returns ref to the selected course
+        //cast ref to courseInfo
         note.course = spinner_courses.selectedItem as CourseInfo
     }
 
