@@ -113,7 +113,6 @@ class NoteActivity : AppCompatActivity() {
             //mmkon tkon null le menu null , aw lw mafesh el item el bdwr 3leh
             if (menuItem != null) {
                 menuItem.icon = getDrawable(R.drawable.ic_baseline_block_24)
-                menuItem.isEnabled = false
             }
 
         }
