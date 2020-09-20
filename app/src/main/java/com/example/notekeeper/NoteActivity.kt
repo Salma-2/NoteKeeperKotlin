@@ -95,6 +95,11 @@ class NoteActivity : AppCompatActivity(){
 
                 return true
             }
+            R.id.action_get_together->{
+                noteGetTogetherHelper.sendMessage(DataManager.loadNote(notePosition))
+
+                return true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
