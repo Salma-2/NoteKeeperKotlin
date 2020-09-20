@@ -25,8 +25,7 @@ class ItemsActivity : AppCompatActivity(),
     NoteRecyclerAdapter.OnNoteSelectedListener {
 
 
-    private val maxRecentlyViewedNotes = 5
-    val recentlyViewedNotes = ArrayList<NoteInfo>(maxRecentlyViewedNotes)
+
 
     private val noteLayoutManager by lazy {
         LinearLayoutManager(this)
@@ -49,7 +48,7 @@ class ItemsActivity : AppCompatActivity(),
     }
 
     private val recentlyViewedNoteRecyclerAdapter by lazy {
-        val adapter = NoteRecyclerAdapter(this, recentlyViewedNotes)
+        val adapter = NoteRecyclerAdapter(this, viewModel.recentlyViewedNotes)
         adapter.setOnSelectedListener(this)
         adapter
     }
@@ -163,26 +162,10 @@ class ItemsActivity : AppCompatActivity(),
         Snackbar.make(list_items, msg, Snackbar.LENGTH_LONG).show()
     }
 
-    private fun addToRecentlyViewedNotes(note: NoteInfo) {
-        // Check if selection is already in the list
-        val existingIndex = recentlyViewedNotes.indexOf(note)
-        if (existingIndex == -1) {
-            // it isn't in the list...
-            // Add new one to beginning of list and remove any beyond max we want to keep
-            recentlyViewedNotes.add(0, note)
-            for (index in recentlyViewedNotes.lastIndex downTo maxRecentlyViewedNotes)
-                recentlyViewedNotes.removeAt(index)
-        } else {
-            // it is in the list...
-            // Shift the ones above down the list and make it first member of the list
-            for (index in (existingIndex - 1) downTo 0)
-                recentlyViewedNotes[index + 1] = recentlyViewedNotes[index]
-            recentlyViewedNotes[0] = note
-        }
-    }
+
 
     override fun onNoteSelected(note: NoteInfo) {
-        addToRecentlyViewedNotes(note)
+        viewModel.addToRecentlyViewedNotes(note)
     }
 
 
