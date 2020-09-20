@@ -2,6 +2,7 @@ package com.example.notekeeper
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -23,6 +24,7 @@ import kotlinx.android.synthetic.main.content_main.list_items
 class ItemsActivity : AppCompatActivity(),
     NavigationView.OnNavigationItemSelectedListener,
     NoteRecyclerAdapter.OnNoteSelectedListener {
+
 
     private val noteLayoutManager by lazy {
         LinearLayoutManager(this)

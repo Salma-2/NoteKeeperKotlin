@@ -11,9 +11,11 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_note.*
 
 
-class NoteActivity : AppCompatActivity() {
+class NoteActivity : AppCompatActivity(){
     private val tag = this::class.simpleName
     private var notePosition = POSITION_NOT_SET
+
+    val noteGetTogetherHelper = NoteGetTogetherHelper(this, lifecycle)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -120,10 +122,11 @@ class NoteActivity : AppCompatActivity() {
     }
 
     override fun onPause() {
-        super.onPause()
         saveNote()
         Log.d(tag, "onPause")
+        super.onPause()
     }
+
 
     private fun saveNote() {
         val note = DataManager.loadNote(notePosition)

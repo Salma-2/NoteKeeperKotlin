@@ -1,4 +1,4 @@
-package com.jwhh.notekeeper
+package com.example.notekeeper
 
 import android.content.Context
 import android.os.Handler
