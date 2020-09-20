@@ -17,7 +17,7 @@ import org.junit.runner.RunWith
 class CreateNewNote{
     //launch notelistactivity
     @Rule @JvmField
-    val noteListActivity = ActivityTestRule(NoteListActivity::class.java)
+    val noteListActivity = ActivityTestRule(ItemsActivity::class.java)
     @Test
     fun createNewNote(){
         val course= DataManager.courses["android_async"]
@@ -31,7 +31,10 @@ class CreateNewNote{
 
 
         onView(withId(R.id.text_note_title)).perform(typeText(noteTitle))
-        onView(withId(R.id.text_note_text)).perform(typeText(noteText), closeSoftKeyboard())
+        onView(withId(R.id.text_note_text)).perform(typeText(noteText))
+
+//        closeSoftKeyboard()
+        pressBack()
         pressBack()
 
 
