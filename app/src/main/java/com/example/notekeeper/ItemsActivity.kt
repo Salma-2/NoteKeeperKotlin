@@ -28,7 +28,7 @@ class ItemsActivity : AppCompatActivity(),
         LinearLayoutManager(this)
     }
     private val noteRecyclerAdapter by lazy {
-        val adapter = NoteRecyclerAdapter(this, DataManager.notes)
+        val adapter = NoteRecyclerAdapter(this, DataManager.loadNotes())
         adapter.setOnSelectedListener(this)
         adapter
     }
