@@ -3,6 +3,8 @@ package com.example.notekeeper
 import androidx.lifecycle.ViewModel
 
 class ItemsActivityViewModel: ViewModel() {
+    var navDrawerDisplayedSelectionName =
+        "com.example.notekeeper.ItemsActivityViewModel.navDrawerDisplayedSelection"
     var navDrawerDisplayedSelection = R.id.nav_notes
     private val maxRecentlyViewedNotes = 5
     val recentlyViewedNotes = ArrayList<NoteInfo>(maxRecentlyViewedNotes)

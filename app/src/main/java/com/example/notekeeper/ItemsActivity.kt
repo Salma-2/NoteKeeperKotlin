@@ -24,9 +24,6 @@ class ItemsActivity : AppCompatActivity(),
     NavigationView.OnNavigationItemSelectedListener,
     NoteRecyclerAdapter.OnNoteSelectedListener {
 
-
-
-
     private val noteLayoutManager by lazy {
         LinearLayoutManager(this)
     }
@@ -65,6 +62,10 @@ class ItemsActivity : AppCompatActivity(),
             startActivity(activityIntent)
         }
 
+        if (savedInstanceState != null) {
+            viewModel.navDrawerDisplayedSelection =
+                savedInstanceState.getInt(viewModel.navDrawerDisplayedSelectionName)
+        }
         handleDisplayedSelection(viewModel.navDrawerDisplayedSelection)
 
         val toggle: ActionBarDrawerToggle = ActionBarDrawerToggle(
@@ -78,6 +79,17 @@ class ItemsActivity : AppCompatActivity(),
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
+
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        if (outState != null) {
+            outState.putInt(
+                viewModel.navDrawerDisplayedSelectionName,
+                viewModel.navDrawerDisplayedSelection
+            )
+        }
 
     }
 
@@ -161,8 +173,6 @@ class ItemsActivity : AppCompatActivity(),
     private fun handleSelection(msg: String) {
         Snackbar.make(list_items, msg, Snackbar.LENGTH_LONG).show()
     }
-
-
 
     override fun onNoteSelected(note: NoteInfo) {
         viewModel.addToRecentlyViewedNotes(note)
