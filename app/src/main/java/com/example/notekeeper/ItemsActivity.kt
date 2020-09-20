@@ -10,6 +10,7 @@ import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -35,6 +36,10 @@ class ItemsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         CourseRecyclerAdapter(this, DataManager.courses.values.toList())
     }
 
+    private val viewModel by lazy {
+        ViewModelProvider(this).get(ItemsActivityViewModel::class.java)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_items)
@@ -47,7 +52,7 @@ class ItemsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
             startActivity(activityIntent)
         }
 
-        displayNotes()
+        handleDisplayedSelection(viewModel.navDrawerDisplayedSelection)
 
         val toggle: ActionBarDrawerToggle = ActionBarDrawerToggle(
             this,
@@ -98,12 +103,10 @@ class ItemsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.nav_courses -> {
-                displayCourses()
-            }
-
+            R.id.nav_courses,
             R.id.nav_notes -> {
-                displayNotes()
+                handleDisplayedSelection(item.itemId)
+                viewModel.navDrawerDisplayedSelection = item.itemId
             }
 
             R.id.nav_share -> {
@@ -117,6 +120,19 @@ class ItemsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    private fun handleDisplayedSelection(itemId: Int) {
+        when (itemId) {
+            R.id.nav_courses -> {
+                displayCourses()
+            }
+
+            R.id.nav_notes -> {
+                displayNotes()
+            }
+        }
+
     }
 
     private fun handleSelection(msg: String) {
