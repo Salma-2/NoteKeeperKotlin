@@ -32,8 +32,6 @@ class CreateNewNote{
 
         onView(withId(R.id.text_note_title)).perform(typeText(noteTitle))
         onView(withId(R.id.text_note_text)).perform(typeText(noteText), closeSoftKeyboard())
-
-
         pressBack()
 
 
