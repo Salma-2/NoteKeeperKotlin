@@ -63,8 +63,7 @@ class ItemsActivity : AppCompatActivity(),
         }
 
         if (savedInstanceState != null) {
-            viewModel.navDrawerDisplayedSelection =
-                savedInstanceState.getInt(viewModel.navDrawerDisplayedSelectionName)
+            viewModel.restoreState(savedInstanceState)
         }
         handleDisplayedSelection(viewModel.navDrawerDisplayedSelection)
 
@@ -85,10 +84,7 @@ class ItemsActivity : AppCompatActivity(),
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         if (outState != null) {
-            outState.putInt(
-                viewModel.navDrawerDisplayedSelectionName,
-                viewModel.navDrawerDisplayedSelection
-            )
+            viewModel.saveState(outState)
         }
 
     }
