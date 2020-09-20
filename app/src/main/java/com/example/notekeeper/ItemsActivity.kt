@@ -14,19 +14,27 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.jwhh.notekeeper.CourseRecyclerAdapter
+import com.example.notekeeper.adapters.CourseRecyclerAdapter
+import com.example.notekeeper.adapters.NoteRecyclerAdapter
 import kotlinx.android.synthetic.main.activity_items.*
 import kotlinx.android.synthetic.main.content_main.list_items
 
 
-class ItemsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class ItemsActivity : AppCompatActivity(),
+    NavigationView.OnNavigationItemSelectedListener,
+    NoteRecyclerAdapter.OnNoteSelectedListener {
 
+
+    private val maxRecentlyViewedNotes = 5
+    val recentlyViewedNotes = ArrayList<NoteInfo>(maxRecentlyViewedNotes)
 
     private val noteLayoutManager by lazy {
         LinearLayoutManager(this)
     }
     private val noteRecyclerAdapter by lazy {
-        NoteRecyclerAdapter(this, DataManager.notes)
+        val adapter = NoteRecyclerAdapter(this, DataManager.notes)
+        adapter.setOnSelectedListener(this)
+        adapter
     }
 
     private val courseLayoutManager by lazy {
@@ -38,6 +46,12 @@ class ItemsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
 
     private val viewModel by lazy {
         ViewModelProvider(this).get(ItemsActivityViewModel::class.java)
+    }
+
+    private val recentlyViewedNoteRecyclerAdapter by lazy {
+        val adapter = NoteRecyclerAdapter(this, recentlyViewedNotes)
+        adapter.setOnSelectedListener(this)
+        adapter
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,6 +94,12 @@ class ItemsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         list_items.adapter = courseRecyclerAdapter
     }
 
+    private fun displayRecentlyViewedNotes() {
+        list_items.layoutManager = noteLayoutManager
+        list_items.adapter = recentlyViewedNoteRecyclerAdapter
+
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -104,7 +124,8 @@ class ItemsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_courses,
-            R.id.nav_notes -> {
+            R.id.nav_notes,
+            R.id.nav_recently_viewed -> {
                 handleDisplayedSelection(item.itemId)
                 viewModel.navDrawerDisplayedSelection = item.itemId
             }
@@ -131,12 +152,37 @@ class ItemsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
             R.id.nav_notes -> {
                 displayNotes()
             }
+            R.id.nav_recently_viewed -> {
+                displayRecentlyViewedNotes()
+            }
         }
 
     }
 
     private fun handleSelection(msg: String) {
         Snackbar.make(list_items, msg, Snackbar.LENGTH_LONG).show()
+    }
+
+    private fun addToRecentlyViewedNotes(note: NoteInfo) {
+        // Check if selection is already in the list
+        val existingIndex = recentlyViewedNotes.indexOf(note)
+        if (existingIndex == -1) {
+            // it isn't in the list...
+            // Add new one to beginning of list and remove any beyond max we want to keep
+            recentlyViewedNotes.add(0, note)
+            for (index in recentlyViewedNotes.lastIndex downTo maxRecentlyViewedNotes)
+                recentlyViewedNotes.removeAt(index)
+        } else {
+            // it is in the list...
+            // Shift the ones above down the list and make it first member of the list
+            for (index in (existingIndex - 1) downTo 0)
+                recentlyViewedNotes[index + 1] = recentlyViewedNotes[index]
+            recentlyViewedNotes[0] = note
+        }
+    }
+
+    override fun onNoteSelected(note: NoteInfo) {
+        addToRecentlyViewedNotes(note)
     }
 
 

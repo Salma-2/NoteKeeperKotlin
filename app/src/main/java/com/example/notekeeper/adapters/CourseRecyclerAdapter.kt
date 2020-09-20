@@ -1,7 +1,6 @@
-package com.jwhh.notekeeper
+package com.example.notekeeper.adapters
 
 import android.content.Context
-import android.content.Intent
 
 import android.view.LayoutInflater
 import android.view.View

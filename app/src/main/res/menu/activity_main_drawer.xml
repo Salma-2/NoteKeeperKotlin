@@ -7,11 +7,18 @@
         <item
             android:id="@+id/nav_notes"
             android:icon="@drawable/ic_baseline_assignment_24"
+            android:iconTint="@color/colorAccent"
             android:title="@string/notes" />
         <item
             android:id="@+id/nav_courses"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:iconTint="@color/colorAccent"
             android:title="@string/courses" />
+        <item
+            android:id="@+id/nav_recently_viewed"
+            android:icon="@drawable/ic_baseline_remove_red_eye_24"
+            android:iconTint="@color/colorAccent"
+            android:title="@string/recently_viewed_notes" />
     </group>
     <item android:title="@string/communicate">
         <menu>

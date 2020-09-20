@@ -1,7 +1,5 @@
 package com.example.notekeeper
 
-import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
 import androidx.test.espresso.Espresso.*
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -9,7 +7,6 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import org.hamcrest.Matchers.*
-import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -20,7 +17,8 @@ import androidx.test.espresso.contrib.DrawerActions
 import androidx.test.espresso.contrib.NavigationViewActions
 
 import androidx.test.espresso.contrib.RecyclerViewActions
-import com.jwhh.notekeeper.CourseRecyclerAdapter
+import com.example.notekeeper.adapters.CourseRecyclerAdapter
+import com.example.notekeeper.adapters.NoteRecyclerAdapter
 
 
 @RunWith(AndroidJUnit4::class)
