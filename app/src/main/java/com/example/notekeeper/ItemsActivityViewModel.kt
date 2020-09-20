@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModel
 
 class ItemsActivityViewModel : ViewModel() {
+    var isNewlyCreated = true
     var recentlyViewedNotesName =
         "com.example.notekeeper.ItemsActivityViewModel.recentlyViewedNotes"
     var navDrawerDisplayedSelectionName =

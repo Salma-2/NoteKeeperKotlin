@@ -62,9 +62,10 @@ class ItemsActivity : AppCompatActivity(),
             startActivity(activityIntent)
         }
 
-        if (savedInstanceState != null) {
+        if (savedInstanceState != null && viewModel.isNewlyCreated) {
             viewModel.restoreState(savedInstanceState)
         }
+        viewModel.isNewlyCreated =false
         handleDisplayedSelection(viewModel.navDrawerDisplayedSelection)
 
         val toggle: ActionBarDrawerToggle = ActionBarDrawerToggle(

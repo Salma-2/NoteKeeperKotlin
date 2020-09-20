@@ -49,20 +49,20 @@ class NoteActivity : AppCompatActivity() {
     }
 
     private fun createNewNote() {
-        DataManager.notes.add(NoteInfo())
-        notePosition = DataManager.notes.lastIndex
+        DataManager.addNote(NoteInfo())
+        notePosition = DataManager.loadNotes().lastIndex
     }
 
     private fun displayNote() {
 
-        if (notePosition > DataManager.notes.lastIndex) {
+        if (notePosition > DataManager.loadNotes().lastIndex) {
             showMessage("Note not found")
             Log.e(tag, "Invalid note position $notePosition," +
-                    " max valid position ${DataManager.notes.lastIndex}")
+                    " max valid position ${DataManager.loadNotes().lastIndex}")
             return
         }
         Log.i(tag, "Displaying note for position $notePosition")
-        val note = DataManager.notes.get(notePosition)
+        val note = DataManager.loadNotes().get(notePosition)
         text_note_title.setText(note.title)
         text_note_text.setText(note.text)
 
@@ -84,7 +84,7 @@ class NoteActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_settings -> true
             R.id.action_next -> {
-                if (notePosition < DataManager.notes.lastIndex) {
+                if (notePosition < DataManager.loadNotes().lastIndex) {
                     moveNext()
                 } else {
                     val msg = "No more notes"
@@ -108,7 +108,7 @@ class NoteActivity : AppCompatActivity() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        if (notePosition >= DataManager.notes.lastIndex) {
+        if (notePosition >= DataManager.loadNotes().lastIndex) {
             val menuItem = menu?.findItem(R.id.action_next)
             //mmkon tkon null le menu null , aw lw mafesh el item el bdwr 3leh
             if (menuItem != null) {
@@ -126,7 +126,7 @@ class NoteActivity : AppCompatActivity() {
     }
 
     private fun saveNote() {
-        val note = DataManager.notes[notePosition]
+        val note = DataManager.loadNote(notePosition)
         note.text = text_note_text.text.toString()
         note.title = text_note_title.text.toString()
         //returns ref to the selected course
@@ -137,5 +137,5 @@ class NoteActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putInt(NOTE_POSITION, notePosition)
-    }
+}
 }
